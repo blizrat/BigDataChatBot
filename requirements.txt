@@ -1,0 +1,9 @@
+pandas
+numpy
+jupyter
+faiss-cpu
+langchain-experimental
+pymongo
+PyPDF2
+selenium
+youtube-transcript-api
