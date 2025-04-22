@@ -2,6 +2,8 @@ from config import config
 from config import index
 from data_ingestion.ingest_book_data import IngestBookData
 from data_ingestion.ingest_youtube_data import IngestYoutubeData
+from data_chunking.chunk_book_data import ChunkBookData
+from data_chunking.chunk_youtube_data import ChunkYoutubeData
 
 class Main:
 
@@ -35,5 +37,10 @@ if __name__ == '__main__':
     ingest_youtube_data_obj = IngestYoutubeData(db = db)
     ingest_youtube_data_obj.ingest_youtube_data()
 
+    chunk_book_data_obj = ChunkBookData(db = db)
+    chunk_book_data_obj.get_book_chunks()
+
+    chunk_youtube_data_obj = ChunkYoutubeData(db = db)
+    chunk_youtube_data_obj.get_youtube_chunks()
 
 
