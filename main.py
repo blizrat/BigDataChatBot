@@ -4,6 +4,8 @@ from data_ingestion.ingest_book_data import IngestBookData
 from data_ingestion.ingest_youtube_data import IngestYoutubeData
 from data_chunking.chunk_book_data import ChunkBookData
 from data_chunking.chunk_youtube_data import ChunkYoutubeData
+from data_embedding.embedding_text_chunks import EmbeddingTextChunks
+from data_indexing.indexing_text_embeddings import IndexTextEmbeddings
 
 class Main:
 
@@ -24,23 +26,30 @@ class Main:
         obj1.get_video_data()
 
 if __name__ == '__main__':
-    obj = Main()
-    obj.add_books()
-    obj.add_video_data()
+    #obj = Main()
+    #obj.add_books()
+    #obj.add_video_data()
 
     config_obj = config.Config()
     db = config_obj.get_connection()
 
-    ingest_book_data_obj = IngestBookData(db = db)
-    ingest_book_data_obj.ingest_books()
+    #ingest_book_data_obj = IngestBookData(db = db)
+    #ingest_book_data_obj.ingest_books()
 
-    ingest_youtube_data_obj = IngestYoutubeData(db = db)
-    ingest_youtube_data_obj.ingest_youtube_data()
+    #ingest_youtube_data_obj = IngestYoutubeData(db = db)
+    #ingest_youtube_data_obj.ingest_youtube_data()
 
-    chunk_book_data_obj = ChunkBookData(db = db)
-    chunk_book_data_obj.get_book_chunks()
+    #chunk_book_data_obj = ChunkBookData(db = db)
+    #chunk_book_data_obj.get_book_chunks()
 
-    chunk_youtube_data_obj = ChunkYoutubeData(db = db)
-    chunk_youtube_data_obj.get_youtube_chunks()
+    #chunk_youtube_data_obj = ChunkYoutubeData(db = db)
+    #chunk_youtube_data_obj.get_youtube_chunks()
+
+    embed_text_chunks_obj = EmbeddingTextChunks(db)
+    embeddings, chunk_ids = embed_text_chunks_obj.get_text_embedding()
+
+    index_text_embeddings_obj = IndexTextEmbeddings(embeddings, chunk_ids)
+    index_text_embeddings_obj.get_indexed_embeddings()
+
 
 
