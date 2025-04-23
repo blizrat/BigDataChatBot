@@ -6,7 +6,7 @@ from langchain_experimental.text_splitter import SemanticChunker
 class ChunkYoutubeData:
     def __init__(self, db):
         self.db = db
-        self.collection = db['Youtube_data_test']
+        self.collection = db['Youtube_data']
         self.embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 
     def get_youtube_data(self):
@@ -15,7 +15,7 @@ class ChunkYoutubeData:
 
     def get_youtube_chunks(self):
         data = self.get_youtube_data()
-        self.collection = self.db['chunking_test']
+        self.collection = self.db['chunking']
 
         semantic_chunker = SemanticChunker(self.embedding_model)
         for docs in data:

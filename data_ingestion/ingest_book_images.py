@@ -6,7 +6,7 @@ from bson import Binary
 class IngestBookImages:
     def __init__(self, db):
         self.db = db
-        self.collection = db['images_test']
+        self.collection = db['images']
 
     def extract_figures_to_mongodb(self, pdf_path):
         doc = fitz.open(pdf_path)

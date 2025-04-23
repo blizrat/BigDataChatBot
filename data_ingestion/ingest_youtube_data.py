@@ -3,7 +3,7 @@ from youtube_transcript_api import YouTubeTranscriptApi , TranscriptsDisabled
 
 class IngestYoutubeData:
     def __init__(self, db):
-        self.collection = db['Youtube_data_test']
+        self.collection = db['Youtube_data']
 
     def ingest_youtube_data(self):
         self.collection.delete_many({})

@@ -3,7 +3,7 @@ from PyPDF2 import PdfReader
 
 class IngestBookData:
     def __init__(self, db):
-        self.collection = db['Books_test']
+        self.collection = db['Books']
 
     def ingest_books(self):
         self.collection.delete_many({})

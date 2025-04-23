@@ -5,7 +5,7 @@ from langchain_experimental.text_splitter import SemanticChunker
 class ChunkBookData:
     def __init__(self, db):
         self.db = db
-        self.collection = db['Books_test']
+        self.collection = db['Books']
         self.embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 
     def get_book_data(self):
@@ -14,7 +14,7 @@ class ChunkBookData:
 
     def get_book_chunks(self):
         data = self.get_book_data()
-        self.collection = self.db['chunking_test']
+        self.collection = self.db['chunking']
         self.collection.delete_many({})
 
         semantic_chunker = SemanticChunker(self.embedding_model)

@@ -12,7 +12,7 @@ from selenium.webdriver.chrome.options import Options
 class Config:
     def __init__(self):
         self.client = pymongo.MongoClient("mongodb://localhost:27017/")
-        self.db = self.client["ScrapedData"]
+        self.db = self.client["BigDataChatBot"]
 
     def get_connection(self):
         return self.db

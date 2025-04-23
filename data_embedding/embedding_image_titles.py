@@ -3,7 +3,7 @@ from sentence_transformers import SentenceTransformer
 class EmbeddingImageTitles:
     def __init__(self, db):
         self.db = db
-        self.collection = db['images_test']
+        self.collection = db['images']
         self.model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
         self.text = []
         self.id_count = []

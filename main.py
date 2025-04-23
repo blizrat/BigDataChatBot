@@ -1,7 +1,6 @@
 from config import config
 from config import index
 from data_ingestion.ingest_book_data import IngestBookData
-from data_ingestion.ingest_book_images import IngestBookImages
 from data_ingestion.ingest_youtube_data import IngestYoutubeData
 from data_ingestion.ingest_book_images import  IngestBookImages
 from data_chunking.chunk_book_data import ChunkBookData
@@ -32,33 +31,33 @@ class Main:
         obj1.get_video_data()
 
 if __name__ == '__main__':
-    #obj = Main()
-    #obj.add_books()
-    #obj.add_video_data()
+    obj = Main()
+    obj.add_books()
+    obj.add_video_data()
 
     config_obj = config.Config()
     db = config_obj.get_connection()
 
-    #ingest_book_data_obj = IngestBookData(db = db)
-    #ingest_book_data_obj.ingest_books()
+    ingest_book_data_obj = IngestBookData(db = db)
+    ingest_book_data_obj.ingest_books()
 
-    #ingest_youtube_data_obj = IngestYoutubeData(db = db)
-    #ingest_youtube_data_obj.ingest_youtube_data()
+    ingest_youtube_data_obj = IngestYoutubeData(db = db)
+    ingest_youtube_data_obj.ingest_youtube_data()
 
-    #ingest_book_images_obj = IngestBookImages(db = db)
-    #ingest_book_images_obj.get_figures_from_books()
+    ingest_book_images_obj = IngestBookImages(db = db)
+    ingest_book_images_obj.get_figures_from_books()
 
-    #chunk_book_data_obj = ChunkBookData(db = db)
-    #chunk_book_data_obj.get_book_chunks()
+    chunk_book_data_obj = ChunkBookData(db = db)
+    chunk_book_data_obj.get_book_chunks()
 
-    #chunk_youtube_data_obj = ChunkYoutubeData(db = db)
-    #chunk_youtube_data_obj.get_youtube_chunks()
+    chunk_youtube_data_obj = ChunkYoutubeData(db = db)
+    chunk_youtube_data_obj.get_youtube_chunks()
 
-    #embed_text_chunks_obj = EmbeddingTextChunks(db)
-    #embeddings, chunk_ids = embed_text_chunks_obj.get_text_embedding()
+    embed_text_chunks_obj = EmbeddingTextChunks(db)
+    embeddings, chunk_ids = embed_text_chunks_obj.get_text_embedding()
 
-    #index_text_embeddings_obj = IndexTextEmbeddings(embeddings, chunk_ids)
-    #index_text_embeddings_obj.get_indexed_embeddings()
+    index_text_embeddings_obj = IndexTextEmbeddings(embeddings, chunk_ids)
+    index_text_embeddings_obj.get_indexed_embeddings()
 
     embed_image_titles_obj = EmbeddingImageTitles(db = db)
     embeddings, id_count = embed_image_titles_obj.get_image_embedding()

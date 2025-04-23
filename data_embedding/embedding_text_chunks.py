@@ -3,7 +3,7 @@ from sentence_transformers import SentenceTransformer
 class EmbeddingTextChunks:
     def __init__(self, db):
         self.db = db
-        self.collection = db['chunking_test']
+        self.collection = db['chunking']
         self.model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
         self.text = []
         self.chunk_ids = []
