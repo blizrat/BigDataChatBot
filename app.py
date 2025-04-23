@@ -159,7 +159,7 @@ class QueryProcessor:
         response = requests.post(
             url="https://openrouter.ai/api/v1/chat/completions",
             headers={
-                "Authorization": "Bearer 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",
+                "Authorization": f"Bearer {API_KEY}",
                 "Content-Type": "application/json",
                 "HTTP-Referer": "<YOUR_SITE_URL>",
                 "X-Title": "<YOUR_SITE_NAME>",
@@ -207,7 +207,7 @@ class QueryProcessor:
         response = requests.post(
             url="https://openrouter.ai/api/v1/chat/completions",
             headers={
-                "Authorization": "Bearer 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",
+                "Authorization": f"Bearer {API_KEY}",
                 "Content-Type": "application/json",
                 "HTTP-Referer": "<YOUR_SITE_URL>",
                 "X-Title": "<YOUR_SITE_NAME>",
