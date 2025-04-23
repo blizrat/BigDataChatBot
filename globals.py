@@ -5,3 +5,4 @@ locations = []
 count = {"value": 1}
 video_data = []
 chunk_id = {"value" : 1}
+id_count = {"value" : 1}

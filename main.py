@@ -1,11 +1,17 @@
 from config import config
 from config import index
 from data_ingestion.ingest_book_data import IngestBookData
+from data_ingestion.ingest_book_images import IngestBookImages
 from data_ingestion.ingest_youtube_data import IngestYoutubeData
+from data_ingestion.ingest_book_images import  IngestBookImages
 from data_chunking.chunk_book_data import ChunkBookData
 from data_chunking.chunk_youtube_data import ChunkYoutubeData
 from data_embedding.embedding_text_chunks import EmbeddingTextChunks
+from data_embedding.embedding_image_titles import EmbeddingImageTitles
 from data_indexing.indexing_text_embeddings import IndexTextEmbeddings
+from data_indexing.indexing_image_embeddings import IndexImageEmbeddings
+
+
 
 class Main:
 
@@ -39,17 +45,26 @@ if __name__ == '__main__':
     #ingest_youtube_data_obj = IngestYoutubeData(db = db)
     #ingest_youtube_data_obj.ingest_youtube_data()
 
+    #ingest_book_images_obj = IngestBookImages(db = db)
+    #ingest_book_images_obj.get_figures_from_books()
+
     #chunk_book_data_obj = ChunkBookData(db = db)
     #chunk_book_data_obj.get_book_chunks()
 
     #chunk_youtube_data_obj = ChunkYoutubeData(db = db)
     #chunk_youtube_data_obj.get_youtube_chunks()
 
-    embed_text_chunks_obj = EmbeddingTextChunks(db)
-    embeddings, chunk_ids = embed_text_chunks_obj.get_text_embedding()
+    #embed_text_chunks_obj = EmbeddingTextChunks(db)
+    #embeddings, chunk_ids = embed_text_chunks_obj.get_text_embedding()
 
-    index_text_embeddings_obj = IndexTextEmbeddings(embeddings, chunk_ids)
-    index_text_embeddings_obj.get_indexed_embeddings()
+    #index_text_embeddings_obj = IndexTextEmbeddings(embeddings, chunk_ids)
+    #index_text_embeddings_obj.get_indexed_embeddings()
+
+    embed_image_titles_obj = EmbeddingImageTitles(db = db)
+    embeddings, id_count = embed_image_titles_obj.get_image_embedding()
+
+    index_image_embedding_obj = IndexImageEmbeddings(embeddings, id_count)
+    index_image_embedding_obj.get_indexed_embeddings()
 
 
 

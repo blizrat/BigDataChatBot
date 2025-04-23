@@ -8,3 +8,5 @@ PyPDF2
 selenium
 youtube-transcript-api
 langchain-huggingface
+bson
+PyMUPDF
