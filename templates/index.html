@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Search Assistant</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #121212;
+            --bg-secondary: #1E1E1E;
+            --text-primary: #F3F4F6;
+            --text-secondary: #D1D5DB;
+            --accent-primary: #6366F1;
+            --accent-secondary: #4F46E5;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .chat-container {
+            background-color: var(--bg-secondary);
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .message {
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            max-width: 80%;
+        }
+
+        .user-message {
+            background-color: var(--accent-primary);
+            margin-left: auto;
+            border-bottom-right-radius: 0.25rem;
+        }
+
+        .bot-message {
+            background-color: #2D3748;
+            margin-right: auto;
+            border-bottom-left-radius: 0.25rem;
+        }
+
+        .input-area {
+            border-top: 1px solid #4A5568;
+            background-color: var(--bg-secondary);
+        }
+
+        input[type="text"] {
+            background-color: #2D3748;
+            color: var(--text-primary);
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+        }
+
+        button {
+            background-color: var(--accent-primary);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: var(--accent-secondary);
+        }
+
+        .loading {
+            display: none;
+        }
+
+        .dot-flashing {
+            position: relative;
+            width: 10px;
+            height: 10px;
+            border-radius: 5px;
+            background-color: #9CA3AF;
+            color: #9CA3AF;
+            animation: dot-flashing 1s infinite linear alternate;
+            animation-delay: 0.5s;
+        }
+
+        .dot-flashing::before, .dot-flashing::after {
+            content: '';
+            display: inline-block;
+            position: absolute;
+            top: 0;
+        }
+
+        .dot-flashing::before {
+            left: -15px;
+            width: 10px;
+            height: 10px;
+            border-radius: 5px;
+            background-color: #9CA3AF;
+            color: #9CA3AF;
+            animation: dot-flashing 1s infinite alternate;
+            animation-delay: 0s;
+        }
+
+        .dot-flashing::after {
+            left: 15px;
+            width: 10px;
+            height: 10px;
+            border-radius: 5px;
+            background-color: #9CA3AF;
+            color: #9CA3AF;
+            animation: dot-flashing 1s infinite alternate;
+            animation-delay: 1s;
+        }
+
+        @keyframes dot-flashing {
+            0% {
+                background-color: #9CA3AF;
+            }
+            50%, 100% {
+                background-color: rgba(156, 163, 175, 0.2);
+            }
+        }
+
+        .image-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            padding: 10px 0;
+        }
+
+        .result-image {
+            border-radius: 8px;
+            max-height: 200px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .image-card {
+            background-color: #2D3748;
+            border-radius: 8px;
+            padding: 8px;
+        }
+
+        .image-title {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
+        }
+
+        .markdown-content {
+            line-height: 1.6;
+        }
+
+        .markdown-content p {
+            margin-bottom: 0.75rem;
+        }
+
+        .markdown-content ul, .markdown-content ol {
+            margin-left: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .markdown-content h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .reference {
+            font-size: 0.75rem;
+            color: #9CA3AF;
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen flex flex-col">
+        <header class="bg-gray-900 py-4 px-6 shadow-md">
+            <h1 class="text-xl font-bold text-center">AI Search Assistant</h1>
+        </header>
+
+        <main class="flex-grow p-4 md:p-6 flex flex-col">
+            <div class="chat-container flex-grow flex flex-col p-4 overflow-hidden">
+                <div id="chat-messages" class="flex-grow overflow-y-auto px-2 py-4">
+                    <div class="bot-message message">
+                        <p>Hello! I'm your AI search assistant. Ask me anything, and I'll search through our database to find answers and relevant images.</p>
+                    </div>
+                </div>
+
+                <div class="loading p-4">
+                    <div class="bot-message message inline-flex items-center">
+                        <div class="dot-flashing"></div>
+                    </div>
+                </div>
+
+                <div class="input-area mt-4 p-4 rounded-b-lg">
+                    <div class="flex">
+                        <input type="text" id="user-input" class="flex-grow mr-2" placeholder="Type your question here...">
+                        <button id="send-button" type="button">Send</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatMessages = document.getElementById('chat-messages');
+            const userInput = document.getElementById('user-input');
+            const sendButton = document.getElementById('send-button');
+            const loadingIndicator = document.querySelector('.loading');
+
+            function addMessage(content, isUser = false) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = isUser ? 'user-message message' : 'bot-message message';
+                messageDiv.innerHTML = content;
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            function showLoading() {
+                loadingIndicator.style.display = 'block';
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            function hideLoading() {
+                loadingIndicator.style.display = 'none';
+            }
+
+            function sendQuery() {
+                const query = userInput.value.trim();
+                if (!query) return;
+
+                // Add user message
+                addMessage(`<p>${query}</p>`, true);
+                userInput.value = '';
+
+                // Show loading indicator
+                showLoading();
+
+                // Send request to server
+                fetch('/query', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ query: query }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    hideLoading();
+
+                    // Create response message
+                    let responseHTML = `<div class="markdown-content">${formatMarkdown(data.text_answer)}</div>`;
+
+                    // Add images if any
+                    if (data.image_results && data.image_results.length > 0) {
+                        responseHTML += '<div class="image-container mt-3">';
+                        data.image_results.forEach(img => {
+                            responseHTML += `
+                                <div class="image-card">
+                                    <img src="data:image/jpeg;base64,${img.image_data}" alt="${img.title}" class="result-image">
+                                    <div class="image-title">${img.title}</div>
+                                </div>
+                            `;
+                        });
+                        responseHTML += '</div>';
+                    }
+
+                    addMessage(responseHTML);
+                })
+                .catch(error => {
+                    hideLoading();
+                    addMessage('<p>Sorry, there was an error processing your request.</p>');
+                    console.error('Error:', error);
+                });
+            }
+
+            // Format markdown-like content
+            function formatMarkdown(text) {
+                if (!text) return '';
+
+                // Handle basic formatting
+                let formatted = text
+                    // Bold
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    // Italic
+                    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                    // Code blocks
+                    .replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
+                    // Inline code
+                    .replace(/`(.*?)`/g, '<code>$1</code>')
+                    // Headers
+                    .replace(/^### (.*?)$/gm, '<h3>$1</h3>')
+                    // Lists
+                    .replace(/^- (.*?)$/gm, '<li>$1</li>')
+                    // Paragraphs
+                    .replace(/\n\n/g, '</p><p>')
+                    // Reference section
+                    .replace(/(References:|Reference:)([\s\S]*?)$/g, '<div class="reference"><strong>References:</strong>$2</div>');
+
+                // Wrap in paragraph if not already
+                if (!formatted.startsWith('<')) {
+                    formatted = `<p>${formatted}</p>`;
+                }
+
+                return formatted;
+            }
+
+            // Event listeners
+            sendButton.addEventListener('click', sendQuery);
+
+            userInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendQuery();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
